@@ -2,11 +2,6 @@
 # system.prop for slte
 #
 
-# OTA Updates
-ro.ota.romname=Resurrection Remix LP v5.4.6
-ro.ota.version=20150530
-ro.ota.manifest=https://goo.gl/OPKjDc
-
 # Screen
 ro.sf.lcd_density=320
 
@@ -23,3 +18,8 @@ persist.sys.usb.config=mtp
 wifi.interface=wlan0
 
 ro.nfc.sec_hal=true
+
+# OTA Updates
+ro.ota.romname=Resurrection Remix LP v5.4.7
+ro.ota.version=20150609
+ro.ota.manifest=https://goo.gl/OPKjDc

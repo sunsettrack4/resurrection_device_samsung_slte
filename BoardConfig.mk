@@ -1,5 +1,8 @@
 LOCAL_PATH := device/samsung/slte
 
+# Assert
+TARGET_OTA_ASSERT_DEVICE := slte,sltexx
+
 # Platform
 BOARD_VENDOR := samsung
 TARGET_BOARD_PLATFORM := exynos5
@@ -20,7 +23,6 @@ ARCH_ARM_HAVE_TLS_REGISTER := true
 TARGET_BOOTLOADER_BOARD_NAME := universal5430
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
-TARGET_OTA_ASSERT_DEVICE := slte
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x00a00000
@@ -34,14 +36,16 @@ BOARD_USES_SKIA_FIMGAPI := true
 BOARD_USES_NEON_BLITANTIH := true
 
 # Kernel
+#TARGET_PREBUILT_KERNEL := device/samsung/slte/kernel
+TARGET_KERNEL_SOURCE := kernel/samsung/slte
+TARGET_KERNEL_CONFIG := cm_exynos5430-slte_defconfig
 BOARD_KERNEL_BASE := 0x10000000
 BOARD_KERNEL_PAGESIZE := 2048
 #BOARD_KERNEL_CMDLINE := The bootloader ignores the cmdline from the boot.img
 BOARD_KERNEL_SEPARATED_DT := false
-BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --dt device/samsung/slte/dtb.img
-#TARGET_PREBUILT_KERNEL := device/samsung/slte/kernel
-TARGET_KERNEL_SOURCE := kernel/samsung/slte
-TARGET_KERNEL_CONFIG := cm_exynos5430-slte_defconfig
+#BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --dt device/samsung/slte/dtb.img
+BOARD_CUSTOM_BOOTIMG_MK := $(LOCAL_PATH)/mkbootimg.mk
+BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --dt out/target/product/$(TARGET_DEVICE)/dt.img
 
 # Include path
 TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
@@ -171,6 +175,17 @@ TARGET_NR_SVC_SUPP_GIDS := 20
 # WFD
 BOARD_USES_WFD_SERVICE := true
 BOARD_USES_WFD := true
+
+# Recovery
+#TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/rootdir/etc/fstab.universal5430
+TARGET_RECOVERY_PIXEL_FORMAT := BRGA_8888
+TARGET_USERIMAGES_USE_EXT4 := true
+BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
+BOARD_HAS_NO_SELECT_BUTTON := true
+BOARD_HAS_NO_REAL_SDCARD := true
+BOARD_RECOVERY_SWIPE := true
+RECOVERY_GRAPHICS_USE_LINELENGTH := true
+RECOVERY_SDCARD_ON_DATA := true
 
 # inherit from the proprietary version
 -include vendor/samsung/slte/BoardConfigVendor.mk	
