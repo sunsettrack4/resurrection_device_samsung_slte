@@ -164,7 +164,8 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libcsc \
     libExynosOMX_Core \
-    libstagefrighthw
+    libstagefrighthw \
+    stagefright
 
 # Power
 PRODUCT_PACKAGES += \
