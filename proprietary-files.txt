@@ -172,6 +172,3 @@ etc/wifi/nvram_net.txt_muratafem1
 etc/wifi/nvram_net.txt_semco
 etc/wifi/nvram_net.txt_semco3rd
 etc/wifi/nvram_net.txt_wisol
-
-####################
-bin/cbd

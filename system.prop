@@ -2,18 +2,8 @@
 # system.prop for slte
 #
 
-# HWUI_BUILD_PROPERTIES
-ro.hwui.texture_cache_size=24
-ro.hwui.layer_cache_size=16
-ro.hwui.path_cache_size=4
-ro.hwui.shape_cache_size=1
-ro.hwui.gradient_cache_size=0.5
-ro.hwui.drop_shadow_cache_size=2
-ro.hwui.r_buffer_cache_size=2
-ro.hwui.text_small_cache_width=1024
-ro.hwui.text_small_cache_height=512
-ro.hwui.text_large_cache_width=2048
-ro.hwui.text_large_cache_height=1024
+# CBD
+ro.cbd.version=5.0
 
 # Screen
 ro.sf.lcd_density=320
