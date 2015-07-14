@@ -141,7 +141,8 @@ PRODUCT_PACKAGES += \
     audio.a2dp.default \
     audio.usb.default \
     audio.r_submix.default \
-    audio.primary.universal5430
+    audio.primary.universal5430 \
+    AudioWorkaround
 
 # Bluetooth
 #PRODUCT_COPY_FILES += \
@@ -217,11 +218,6 @@ PRODUCT_PACKAGES += \
     AntHalService \
     com.dsi.ant.antradio_library \
     libantradio
-
-# USB
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp \
-    persist.sys.isUsbOtgEnabled=true
 
 # MobiCore setup
 PRODUCT_PACKAGES += \
