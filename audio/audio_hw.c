@@ -17,7 +17,7 @@
  */
 
 #define LOG_TAG "audio_hw_primary"
-#define LOG_NDEBUG 0
+/* #define LOG_NDEBUG 0 */
 
 #include <errno.h>
 #include <pthread.h>
@@ -177,8 +177,9 @@ struct audio_device {
     audio_mode_t mode;
     float voice_volume;
     bool in_call;
-    bool bluetooth_nrec;
     bool wb_amr;
+    bool noise_suppression;
+    bool bluetooth_nrec;
     struct stream_out *primary_output;
     struct ril_handle ril;
 };
@@ -284,7 +285,7 @@ int get_output_device_id(audio_devices_t device)
 }
 
 int get_input_source_id(audio_source_t source, audio_devices_t in_device,
-                        bool wb_amr)
+                        bool wb_amr, bool noise_suppression)
 {
     switch (source) {
     case AUDIO_SOURCE_DEFAULT:
@@ -305,10 +306,17 @@ int get_input_source_id(audio_source_t source, audio_devices_t in_device,
     case AUDIO_SOURCE_VOICE_COMMUNICATION:
         return IN_SOURCE_VOICE_COMMUNICATION;
     case AUDIO_SOURCE_VOICE_CALL:
-        if (wb_amr)
-            return IN_SOURCE_VOICE_CALL_WB;
-        else
-            return IN_SOURCE_VOICE_CALL;
+        if (noise_suppression) {
+            if (wb_amr)
+                return IN_SOURCE_VOICE_CALL_NS_WB;
+            else
+                return IN_SOURCE_VOICE_CALL_NS;
+        } else {
+            if (wb_amr)
+                return IN_SOURCE_VOICE_CALL_WB;
+            else
+                return IN_SOURCE_VOICE_CALL;
+        }
     default:
         return IN_SOURCE_NONE;
     }
@@ -410,10 +418,10 @@ static int set_hdmi_channels(struct audio_device *adev, int channels) {
 #endif
 
 /* must be called with hw device mutex locked */
-static void select_devices(struct audio_device *adev)
+static void do_select_devices(struct audio_device *adev)
 {
     int output_device_id = get_output_device_id(adev->out_device);
-    int input_source_id = get_input_source_id(adev->input_source, adev->in_device, adev->wb_amr);
+    int input_source_id = get_input_source_id(adev->input_source, adev->in_device, adev->wb_amr, adev->noise_suppression);
     const char *output_route = NULL;
     const char *input_route = NULL;
     int new_route_id;
@@ -707,7 +715,7 @@ static void adev_enter_call(struct audio_device *adev)
         ALOGV("%s: Entering IN_CALL mode", __func__);
 
         adev->input_source = AUDIO_SOURCE_VOICE_CALL;
-        select_devices(adev);
+        do_select_devices(adev);
 
         start_voice_call(adev);
         set_call_audio_path(adev);
@@ -719,17 +727,19 @@ static void adev_enter_call(struct audio_device *adev)
 }
 
 /* must be called with hw device mutex locked */
-static void adev_change_call(struct audio_device *adev)
+static void select_devices(struct audio_device *adev)
 {
     if (adev->in_call) {
         ALOGV("%s: Changing IN_CALL mode", __func__);
 
         adev->input_source = AUDIO_SOURCE_VOICE_CALL;
-        select_devices(adev);
+        do_select_devices(adev);
 
         start_voice_call(adev);
         set_call_audio_path(adev);
         set_call_volume(adev);
+    } else {
+        do_select_devices(adev);
     }
 }
 
@@ -743,7 +753,7 @@ static void adev_leave_call(struct audio_device *adev)
         ril_set_call_clock_sync(&adev->ril, SOUND_CLOCK_STOP);
 
         adev->input_source = AUDIO_SOURCE_DEFAULT;
-        select_devices(adev);
+        do_select_devices(adev);
 
         stop_voice_call(adev);
         //set_call_audio_path(adev);
@@ -1082,7 +1092,7 @@ static void do_out_standby(struct stream_out *out)
         }
 #endif
 
-        if (out->device & AUDIO_DEVICE_OUT_ALL_SCO)
+        if (!adev->in_call && (out->device & AUDIO_DEVICE_OUT_ALL_SCO))
             stop_bt_sco(adev);
 
         /* re-calculate the set of active devices from other streams */
@@ -1198,7 +1208,7 @@ static int out_set_parameters(struct audio_stream *stream, const char *kvpairs)
                     adev_enter_call(adev);
                 } else {
                     adev->out_device = output_devices(out) | val;
-                    adev_change_call(adev);
+                    select_devices(adev);
                 }
             }
             if ((adev->mode != AUDIO_MODE_IN_CALL) && adev->in_call) {
@@ -1451,8 +1461,10 @@ static void do_in_standby(struct stream_in *in)
         pcm_close(in->pcm);
         in->pcm = NULL;
 
-        if (in->device & AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET)
+        if (!adev->in_call &&
+            (in->device & AUDIO_DEVICE_IN_BLUETOOTH_SCO_HEADSET)) {
             stop_bt_sco(adev);
+        }
 
         in->dev->input_source = AUDIO_SOURCE_DEFAULT;
         in->dev->in_device = AUDIO_DEVICE_NONE;
@@ -1839,12 +1851,14 @@ static int adev_set_parameters(struct audio_hw_device *dev, const char *kvpairs)
 
     ret = str_parms_get_str(parms, "noise_suppression", value, sizeof(value));
     if (ret >= 0) {
-        if (strcmp(value, "auto") == 0 || strcmp(value, "on") == 0) {
-            ALOGV("%s: enabling two mic control", __func__);
-            ril_set_two_mic_control(&adev->ril, AUDIENCE, TWO_MIC_SOLUTION_ON);
-        } else {
+        if (strcmp(value, "off") == 0) {
             ALOGV("%s: disabling two mic control", __func__);
+            adev->noise_suppression = false;
             ril_set_two_mic_control(&adev->ril, AUDIENCE, TWO_MIC_SOLUTION_OFF);
+        } else {
+            ALOGV("%s: enabling two mic control", __func__);
+            adev->noise_suppression = true;
+            ril_set_two_mic_control(&adev->ril, AUDIENCE, TWO_MIC_SOLUTION_ON);
         }
     }
 
@@ -1858,14 +1872,19 @@ static char * adev_get_parameters(const struct audio_hw_device *dev,
                                   const char *keys)
 {
     struct audio_device *adev = (struct audio_device *)dev;
-    struct str_parms *parms = str_parms_create_str(keys);
+    struct str_parms *parms;
     char value[32];
-    int ret = str_parms_get_str(parms, "ec_supported", value, sizeof(value));
+    int ret;
     char *str;
 
+    parms = str_parms_create_str(keys);
+    ret = str_parms_get_str(parms, "noise_suppression", value, sizeof(value));
     str_parms_destroy(parms);
     if (ret >= 0) {
-        parms = str_parms_create_str("ec_supported=yes");
+        if (adev->noise_suppression)
+            parms = str_parms_create_str("noise_suppression=on");
+        else
+            parms = str_parms_create_str("noise_suppression=off");
         str = str_parms_to_str(parms);
         str_parms_destroy(parms);
         return str;
@@ -2138,6 +2157,11 @@ static int adev_open(const hw_module_t* module, const char* name,
 
     adev->mode = AUDIO_MODE_NORMAL;
     adev->voice_volume = 1.0f;
+
+    adev->in_call = false;
+    adev->wb_amr = false;
+    adev->noise_suppression = false;
+    adev->bluetooth_nrec = false;
 
     /* RIL */
     ril_open(&adev->ril);

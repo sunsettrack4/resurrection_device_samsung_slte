@@ -70,10 +70,7 @@ PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.opengles.version=196608 \
-    ro.sf.lcd_density=480 \
-    debug.hwc.winupdate=1 \
-    debug.hwc.otf=1
+    ro.opengles.version=196608
 
 PRODUCT_PACKAGES += \
     libion_exynos \
@@ -150,7 +147,6 @@ PRODUCT_PACKAGES += \
 
 # Media profile
 PRODUCT_COPY_FILES += \
-    frameworks/av/media/libstagefright/data/media_codecs_ffmpeg.xml:system/etc/media_codecs_ffmpeg.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
