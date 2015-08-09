@@ -12,9 +12,9 @@ ro.sf.lcd_density=320
 rild.libpath=/system/lib/libsec-ril.so
 rild.libargs=-d /dev/ttyS0
 ro.telephony.ril_class=SlteRIL
-ro.telephony.default_network=9
-telephony.lteOnGsmDevice=1
-telephony.lteOnCdmaDevice=0
+
+# Camera
+camera2.portability.force_api=1
 
 # USB
 persist.sys.isUsbOtgEnabled=true
