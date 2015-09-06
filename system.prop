@@ -27,4 +27,4 @@ wifi.interface=wlan0
 ro.nfc.sec_hal=true
 
 # Audio workaround
-slte.audio.workaround=true
+persist.incall.workaround=true

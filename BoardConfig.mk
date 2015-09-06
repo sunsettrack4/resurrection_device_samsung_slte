@@ -6,7 +6,7 @@ TARGET_OTA_ASSERT_DEVICE := slte,sltexx
 # Platform
 BOARD_VENDOR := samsung
 TARGET_BOARD_PLATFORM := exynos5
-TARGET_SLSI_VARIANT := cm
+TARGET_SLSI_VARIANT := insignal
 TARGET_SOC := exynos5430
 
 # Architecture
@@ -96,8 +96,7 @@ CHARGING_ENABLED_PATH := /sys/class/power_supply/battery/batt_lp_charging
 USE_OPENGL_RENDERER := true
 BOARD_EGL_CFG := $(LOCAL_PATH)/configs/egl/egl.cfg
 BOARD_HDMI_INCAPABLE := true
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
-#COMMON_GLOBAL_CFLAGS += -DSURFACE_IS_BGR32
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 5
 COMMON_GLOBAL_CFLAGS += -DUSE_NATIVE_SEC_NV12TILED
 
 # HWC Services
@@ -115,6 +114,10 @@ BOARD_USE_METADATABUFFERTYPE := true
 BOARD_USE_STOREMETADATA := true
 BOARD_USE_S3D_SUPPORT := true
 BOARD_USE_ENCODER_RGBINPUT_SUPPORT := true
+BOARD_USE_DUALDPB_MODE := true
+BOARD_USE_CSC_HW := false
+BOARD_USE_QOS_CTRL := false
+BOARD_USE_H264_PREPEND_SPS_PPS := false
 #
 BOARD_USE_VP8ENC_SUPPORT := true
 BOARD_USE_HEVCDEC_SUPPORT := true
@@ -160,15 +163,25 @@ BOARD_SEPOLICY_DIRS := \
 	device/samsung/slte/sepolicy
 
 BOARD_SEPOLICY_UNION := \
-	app.te \
+	bluetooth.te \
 	cpboot-daemon.te \
+	device.te \
 	domain.te \
 	exyrngd.te \
 	file_contexts \
 	file.te \
+	gpsd.te \
+	init.te \
+	kernel.te \
 	macloader.te \
+	mediaserver.te \
 	recovery.te \
-	ueventd.te
+	rild.te \
+	system_server.te \
+	ueventd.te \
+	uncrypt.te \
+	vold.te \
+	wpa.te
 
 # SurfaceFlinger
 BOARD_USES_SYNC_MODE_FOR_MEDIA := true
@@ -180,8 +193,8 @@ ENABLE_WEBGL := true
 TARGET_NR_SVC_SUPP_GIDS := 20
 
 # WFD
-#BOARD_USES_WFD_SERVICE := true
-#BOARD_USES_WFD := true
+BOARD_USES_WFD_SERVICE := true
+BOARD_USES_WFD := true
 
 # Recovery
 BOARD_HAS_DOWNLOAD_MODE := true
@@ -196,4 +209,4 @@ RECOVERY_GRAPHICS_USE_LINELENGTH := true
 RECOVERY_SDCARD_ON_DATA := true
 
 # inherit from the proprietary version
--include vendor/samsung/slte/BoardConfigVendor.mk	
+-include vendor/samsung/slte/BoardConfigVendor.mk
