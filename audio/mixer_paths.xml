@@ -1105,9 +1105,14 @@ INPUT_CHANNEL_MAP {
     <!-- ### Volume ### -->
 
     <path name="volume-builtin-mic-default">
-        <ctl name="IN1L Volume" value="9" />
-        <ctl name="IN1L Digital Volume" value="128" />
-        <ctl name="LHPF1 Input 1 Volume" value="32" />
+		<!--
+		<ctl name="IN1L Volue" value="9" />
+		<ctl name="IN1L Digital Volume" value="128" />
+		<ctl name="LHPF1 Input 1 Voume" value="32" />
+		-->
+        <ctl name="IN1L Volume" value="48" />
+        <ctl name="IN1L Digital Volume" value="100" />
+        <ctl name="LHPF1 Input 1 Volume" value="48" />
     </path>
 
     <path name="volume-builtin-mic-incall-earpiece">
