@@ -26,9 +26,9 @@ How To Build ResurrectionRemix for Samsung Galaxy Alpha
       <project name="CyanogenMod/android_packages_apps_SamsungServiceMode" revision="cm-13.0" path="packages/apps/SamsungServiceMode" remote="github" />
       <project name="CyanogenMod/android_hardware_samsung" revision="cm-13.0" path="hardware/samsung" remote="github" />
 
-      <project name="CyanogenMod/android_hardware_samsung_slsi-cm_exynos" revision="cm-13.0" path="hardware/samsung_slsi-cm/exynos" />
-      <project name="CyanogenMod/android_hardware_samsung_slsi-cm_exynos5" revision="cm-13.0" path="hardware/samsung_slsi-cm/exynos5" />
-      <project name="CyanogenMod/android_hardware_samsung_slsi-cm_openmax" revision="cm-13.0" path="hardware/samsung_slsi-cm/openmax" />
+      <project name="CyanogenMod/android_hardware_samsung_slsi-cm_exynos" revision="cm-13.0" path="hardware/samsung_slsi-cm/exynos" remote="github" />
+      <project name="CyanogenMod/android_hardware_samsung_slsi-cm_exynos5" revision="cm-13.0" path="hardware/samsung_slsi-cm/exynos5" remote="github" />
+      <project name="CyanogenMod/android_hardware_samsung_slsi-cm_openmax" revision="cm-13.0" path="hardware/samsung_slsi-cm/openmax" remote="github" />
       <project name="projects/android/android_hardware_samsung_slsi_exynos5430" revision="cm-13.0" path="hardware/samsung_slsi-cm/exynos5430" remote="cryptomilk" />
 
       <project name="projects/android/android_kernel_samsung_slte.git" revision="cm-13.0" path="kernel/samsung/slte" remote="cryptomilk" />
@@ -38,7 +38,7 @@ How To Build ResurrectionRemix for Samsung Galaxy Alpha
       <project name="CyanogenMod/android_external_stlport" revision="cm-13.0" path="external/stlport" remote="github" />
   </manifest>
 
-  $ repo sync
+  $ repo sync --force-sync
 
 
   - Setup environment
