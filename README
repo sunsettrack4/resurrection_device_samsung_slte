@@ -31,7 +31,7 @@ How To Build ResurrectionRemix for Samsung Galaxy Alpha
       <project name="CyanogenMod/android_hardware_samsung_slsi-cm_openmax" revision="cm-13.0" path="hardware/samsung_slsi-cm/openmax" remote="github" />
       <project name="projects/android/android_hardware_samsung_slsi_exynos5430" revision="cm-13.0" path="hardware/samsung_slsi-cm/exynos5430" remote="cryptomilk" />
 
-      <project name="projects/android/android_kernel_samsung_slte.git" revision="cm-13.0" path="kernel/samsung/slte" remote="cryptomilk" />
+      <project name="sunsettrack4/resurrection_kernel_samsung_slte" revision="marshmallow" path="kernel/samsung/slte" remote="github" />
       <project name="sunsettrack4/resurrection_device_samsung_slte" revision="marshmallow" path="device/samsung/slte" remote="github" />
       <project name="sunsettrack4/resurrection_vendor_samsung_slte" revision="marshmallow" path="vendor/samsung/slte" remote="github" />
       
