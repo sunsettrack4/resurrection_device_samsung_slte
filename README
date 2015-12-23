@@ -1,34 +1,20 @@
 Device configuration for the Samsung Galaxy Alpha
 
 Copyright (C) 2014-2015 The CyanogenMod Project
-Copyright (C) 2014-2015 Andreas Schneider <asn@cryptomilk.org>
+WORK IN PROGRESS.
+-------------------------------------------------------
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-------------------------------------------------------------------
-
-* Description
-
-  This repository is for CM-13.0 on Samsung Galaxy Alpha (slte)
-
-    THIS IS WORK IN PROGRESS.
-
-
-* How To Build CM-13.0 for Samsung Galaxy Alpha
+How To Build ResurrectionRemix for Samsung Galaxy Alpha
 
   - Make a workspace
 
-  $ mkdir -p ~/cyanogenmod/system
-  $ cd ~/cyanogenmod/system
+  $ mkdir ~/rr
+  $ cd ~/rr
 
 
   - Do repo init & sync
 
-  $ repo init -u git://github.com/CyanogenMod/android.git -b cm-13.0
+  $ repo init -u https://github.com/ResurrectionRemix/platform_manifest.git -b marshmallow
 
 
   - Create .repo/local_manifests/roomservice.xml with the following content:
@@ -37,31 +23,23 @@ Copyright (C) 2014-2015 Andreas Schneider <asn@cryptomilk.org>
   <manifest>
       <remote  name="cryptomilk" fetch="git://git.cryptomilk.org/" />
 
-      <project name="omnirom/android_bootable_recovery" revision="android-6.0" path="bootable/recovery-twrp" remote="github" />
+      <project name="CyanogenMod/android_packages_apps_SamsungServiceMode" revision="cm-13.0" path="packages/apps/SamsungServiceMode" remote="github" />
+      <project name="CyanogenMod/android_hardware_samsung" revision="cm-13.0" path="hardware/samsung" remote="github" />
 
-      <project name="CyanogenMod/android_packages_apps_SamsungServiceMode" path="packages/apps/SamsungServiceMode" remote="github" />
-      <project name="CyanogenMod/android_hardware_samsung" path="hardware/samsung" remote="github" />
+      <project name="CyanogenMod/android_hardware_samsung_slsi-cm_exynos" revision="cm-13.0" path="hardware/samsung_slsi-cm/exynos" />
+      <project name="CyanogenMod/android_hardware_samsung_slsi-cm_exynos5" revision="cm-13.0" path="hardware/samsung_slsi-cm/exynos5" />
+      <project name="CyanogenMod/android_hardware_samsung_slsi-cm_openmax" revision="cm-13.0" path="hardware/samsung_slsi-cm/openmax" />
+      <project name="projects/android/android_hardware_samsung_slsi_exynos5430" revision="cm-13.0" path="hardware/samsung_slsi-cm/exynos5430" remote="cryptomilk" />
 
-      <project name="CyanogenMod/android_hardware_samsung_slsi-cm_exynos" path="hardware/samsung_slsi-cm/exynos" />
-      <project name="CyanogenMod/android_hardware_samsung_slsi-cm_exynos5" path="hardware/samsung_slsi-cm/exynos5" />
-      <project name="CyanogenMod/android_hardware_samsung_slsi-cm_openmax" path="hardware/samsung_slsi-cm/openmax" />
-      <project name="projects/android/android_hardware_samsung_slsi_exynos5430" path="hardware/samsung_slsi/exynos5430" remote="cryptomilk" />
-
-      <project name="projects/android/android_kernel_samsung_slte.git" path="kernel/samsung/slte" remote="cryptomilk" />
-      <project name="projects/android/android_device_samsung_slte.git" path="device/samsung/slte" remote="cryptomilk" />
+      <project name="projects/android/android_kernel_samsung_slte.git" revision="cm-13.0" path="kernel/samsung/slte" remote="cryptomilk" />
+      <project name="sunsettrack4/resurrection_device_samsung_slte" revision="marshmallow" path="device/samsung/slte" remote="github" />
+      <project name="sunsettrack4/resurrection_vendor_samsung_slte" revision="marshmallow" path="vendor/samsung/slte" remote="github" />
+      
+      <project name="CyanogenMod/android_external_stlport" revision="cm-13.0" path="external/stlport" remote="github" />
   </manifest>
 
   $ repo sync
 
-  - Copy proprietary vendor files
-
-  There are two options to to that. Connect your device with adb enabled and run:
-
-    ./extract-files.sh
-
-  Or if you have the system image unpacked on your disk, then simply run:
-
-    STOCK_ROM_DIR=/path/to/system ./extract-files.sh
 
   - Setup environment
 
@@ -69,16 +47,7 @@ Copyright (C) 2014-2015 Andreas Schneider <asn@cryptomilk.org>
   $ lunch cm_slte-userdebug
 
 
-  - Build CM
+  - Build RR
 
   $ export USE_CCACHE=1
   $ make -j10 bacon
-
-
-* Thanks
-
-  CyanogenMod
-  TeamWin
-
-----
-EOF
