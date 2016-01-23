@@ -17,8 +17,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
-    Fence.cpp \
-    GraphicBufferMapper.cpp
+    Fence.cpp
 
 LOCAL_SHARED_LIBRARIES := libui
 
