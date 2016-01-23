@@ -20,7 +20,10 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := cortex-a15
 TARGET_CPU_SMP := true
 ARCH_ARM_HAVE_TLS_REGISTER := true
-OVERRIDE_RS_DRIVER := libRSDriverArm.so
+
+# RENDERSCRIPT
+BOARD_OVERRIDE_RS_CPU_VARIANT_32 := cortex-a15
+#OVERRIDE_RS_DRIVER := libRSDriverArm.so
 
 # Enable dex-preoptimization to speed up first boot sequence
 ifeq ($(HOST_OS),linux)
@@ -75,7 +78,7 @@ BOARD_HDMI_INCAPABLE := true
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 
 # GSC
-BOARD_USES_ONLY_GSC0_GSC1 := true
+#BOARD_USES_ONLY_GSC0_GSC1 := true
 
 # BOOT ANIMATION
 TARGET_BOOTANIMATION_PRELOAD := true
